@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/public/output.css">
+</head>
+<body>
+    
+
+  <div class="bg-cover bg-center bg-no-repeat bg-gray-100 flex justify-center items-center h-screen" style="background-image: url('/Images/login.jpg');">
+    <div class="w-80 p-6 bg-yellow-700 rounded-lg text-white flex flex-col items-center justify-center">
+      <h4 class="title mb-4 text-bold">Log In</h4>
+      <form class="flex flex-col items-center justify-center">
+        <div class="field flex items-center">
+          <svg class="input-icon w-6 h-6 fill-current text-yellow-400 mr-2" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+           
+          </svg>
+          <input autocomplete="off" id="logemail" placeholder="Email" class="input-field bg-none border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 text-gray-300" name="logemail" type="email">
+        </div>
+        <div class="field flex items-center mt-4">
+          <svg class="input-icon w-6 h-6 fill-current text-yellow-400 mr-2" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+           
+          </svg>
+          <input autocomplete="off" id="logpass" placeholder="Password" class="input-field bg-none border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 text-gray-300" name="logpass" type="password">
+        </div>
+        <button class="btn mt-4 bg-yellow-700 py-2 px-5 hover:text-yellow-800 hover:bg-white rounded-xl transition-all " type="submit">Login</button>
+        <a href="#" class="btn-link mt-2">Forgot your password?</a>
+        <a href="/src/signup.html" class="btn-link mt-2 hover:underline text-yellow-500 hover:text-white">Sign up </a>
+      </form>
+    </div>  
+  </div>             
+
+
+</body>
+</html>

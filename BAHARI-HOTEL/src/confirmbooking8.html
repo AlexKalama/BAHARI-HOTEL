@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Booking Confirmation</title>
+   <link rel="stylesheet" href="/public/output.css">
+</head>
+<body class="bg-yellow-100">         
+    <div class="container mx-auto px-4 sm:px-8">
+        <div class="py-8"> 
+            <div class="flex flex-row mb-1 sm:mb-0 justify-between w-full">
+                <h2 class="text-3xl font-bold mb-4 leading-tight">
+                    Confirm Your Booking
+                </h2>
+            </div>      
+
+            <div class="bg-white shadow-lg rounded-lg px-4 py-6">
+                <h2 id="roomName" class="text-xl font-medium text-gray-700 mt-4 mb-2">Room Name</h2>
+                <p id="roomDescription" class="text-gray-600">Room description goes here. This can include details about the room, the service package that comes with the room, and any other relevant information.</p>
+                <p id="roomPrice" class="text-2xl text-gray-700 mt-3 mb-4 font-semibold tracking-wide">3,000KES/night</p>
+
+            </div>
+
+            <div class="my-2 flex sm:flex-row flex-col">
+                <div class="flex flex-row mb-1 sm:mb-0 justify-between w-full">
+                    <div>
+                        <p class="leading-relaxed text-base">Please confirm your booking details and proceed to payment.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg px-4 py-6">
+                <h2 id="roomName" class="text-xl font-medium text-gray-700 mt-4 mb-2"></h2>
+                <p id="roomDescription" class="text-gray-600"></p>
+                <p id="roomPrice" class="text-2xl text-gray-700 mt-3 mb-4 font-semibold tracking-wide"></p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+                    <!-- Repeat this section for each package -->
+                    <div class="bg-gray-100 shadow-lg rounded-lg px-4 py-6 text-center">
+                        <h2 class="text-xl font-medium text-yellow-800 mt-4 mb-2">BED ONLY</h2>
+                        <p class="text-gray-600">Package description goes here. This can include details about the package and any other relevant information.</p>
+                        <p class="text-2xl text-gray-700 mt-3 mb-4 font-semibold tracking-wide">+ KES0</p>
+                        <button class="px-4 py-2 bg-black  text-white rounded-md hover:bg-yellow-500">Select Package</button>
+                    </div>
+                    <!-- End package section -->    
+
+                    <div class="bg-gray-100 shadow-lg rounded-lg px-4 py-6 text-center">
+                        <h2 class="text-xl font-medium text-yellow-800 mt-4 mb-2">BED AND BREAKFAST</h2>
+                        <p class="text-gray-600">Package description goes here. This can include details about the package and any other relevant information.</p>
+                        <p class="text-2xl text-gray-700 mt-3 mb-4 font-semibold tracking-wide">+ KES1500</p>
+                        <button class="px-4 py-2 bg-black  text-white rounded-md hover:bg-yellow-500">Select Package</button>
+                    </div>
+
+                    <div class="bg-gray-100 shadow-lg rounded-lg px-4 py-6 text-center">
+                        <h2 class="text-xl font-medium text-yellow-800 mt-4 mb-2">HALF BOARD</h2>
+                        <p class="text-gray-600">Package description goes here. This can include details about the package and any other relevant information.</p>
+                        <p class="text-2xl text-gray-700 mt-3 mb-4 font-semibold tracking-wide">+ KES3000</p>
+                        <button class="px-4 py-2 bg-black  text-white rounded-md hover:bg-yellow-500">Select Package</button>
+                    </div>  
+
+                    <div class="bg-gray-100 shadow-lg rounded-lg px-4 py-6 text-center">
+                        <h2 class="text-xl font-medium text-yellow-800 mt-4 mb-2">FULL BOARD</h2>
+                        <p class="text-gray-600">Package description goes here. This can include details about the package and any other relevant information.</p>
+                        <p id="packagePrice" class="text-2xl text-gray-700 mt-3 mb-4 font-semibold tracking-wide">+ KES4500</p>
+                        <button onclick="selectPackage(4500)" class="px-4 py-2 bg-black  text-white rounded-md hover:bg-yellow-500">Select Package</button>
+                    </div>
+                    
+                    
+                    <script>
+                        // Replace with the actual price of the room
+                        var roomPrice = 10000;
+                        // Replace with the actual number of days
+                        var numberOfDays = 5;
+                    
+                        function selectPackage(packagePrice) {
+                            var totalPrice = (roomPrice + packagePrice) * numberOfDays;
+                            document.getElementById('totalPayout').innerText = 'KES' + totalPrice;
+                        }
+                    </script>
+                        
+                </div>
+               
+            </div>
+
+            <div id="bookingCard" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-3">
+                <div class="md:flex">
+                  <div class="md:flex-shrink-0">
+                    <img class="h-96 w-full object-cover md:w-48" src="/Images/hhotell.jpg" alt="Hotel image">
+                  </div>
+                  <div class="p-8">
+                    <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Booking Details</div>
+                    <p id="guestName" class="block mt-1 text-lg leading-tight font-medium text-black"></p>
+                    <p id="roomType" class="mt-2 text-gray-500"></p>
+                    <p id="checkInDate" class="mt-2 text-gray-500"></p>
+                    <p id="checkOutDate" class="mt-2 text-gray-500"></p>
+                    <p id="nights" class="mt-2 text-gray-500"></p>
+                    <p id="pricePerNight" class="mt-2 text-gray-500"></p>
+                    <div id="totalAmount" class="font-bold text-xl mt-2"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <script>
+                // Assuming bookingDetails is your JavaScript object that contains the booking details
+                document.getElementById('guestName').textContent = "Guest: " + bookingDetails.guestName;
+                document.getElementById('roomType').textContent = "Room Type: " + bookingDetails.roomType;
+                document.getElementById('checkInDate').textContent = "Check-in: " + bookingDetails.checkInDate;
+                document.getElementById('checkOutDate').textContent = "Check-out: " + bookingDetails.checkOutDate;
+                document.getElementById('nights').textContent = "Nights: " + bookingDetails.nights;
+                document.getElementById('pricePerNight').textContent = "Price per Night: " + bookingDetails.pricePerNight;
+                document.getElementById('totalAmount').textContent = "Total: " + bookingDetails.totalAmount;
+              </script>
+                
+            
+            
+            <button onclick="window.location.href='payment2.html'" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-white hover:text-black font-bold  border-2 border-black mt-5 mb-4">Proceed to Payment</button>    
+            
+          
+              
+
+        </div>
+    </div>
+
+    <script>
+
+        window.onload = function() {
+            document.getElementById('roomName').innerText = localStorage.getItem('roomName');
+            document.getElementById('roomDescription').innerText = localStorage.getItem('roomDescription');
+            document.getElementById('roomPrice').innerText = "KES" + localStorage.getItem('roomPrice') + "/night";
+        }
+        
+    </script>
+
+
+</body>
+</html>

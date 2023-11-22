@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Booking Confirmation</title>
+    <link rel="stylesheet" href="/public/output.css">
+</head>
+<body class="bg-yellow-100">
+    <div class="container mx-auto px-4 sm:px-8">
+        <div class="py-8">
+            <div class="flex flex-row mb-1 sm:mb-0 justify-between w-full">
+                <h2 class="text-3xl leading-tight font-bold">
+                    Confirm Your Booking        
+                </h2>
+            </div>
+            <div class="my-2 flex sm:flex-row flex-col">
+                <div class="flex flex-row mb-1 sm:mb-0 justify-between w-full">
+                    <div>
+                        <p class="leading-relaxed text-base">Please select your preferred package and confirm your booking.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg px-4 py-6">
+                <h2 id="roomName" class="text-xl font-medium text-gray-700 mt-4 mb-2">Room Name</h2>
+                <p id="roomDescription" class="text-gray-600">Room description goes here. This can include details about the room, the service package that comes with the room, and any other relevant information.</p>
+                <p id="roomPrice" class="text-2xl text-gray-700 mt-3 mb-4 font-semibold tracking-wide">3,000KES/night</p>
+                <form>
+                    <label class="block">
+                        <span class="text-gray-700">Adults</span>
+                        <input type="number" class="form-input mt-1 block w-full" placeholder="Enter number of adults">
+                    </label>
+                    <label class="block mt-4">
+                        <span class="text-gray-700">Children</span>
+                        <input type="number" class="form-input mt-1 block w-full" placeholder="Enter number of children">
+                    </label>
+                    <label class="block mt-4">
+                        <span class="text-gray-700">Rooms</span>
+                        <input type="number" class="form-input mt-1 block w-full" placeholder="Enter number of rooms">
+                    </label>
+                    <label class="block mt-4">
+                        <span class="text-gray-700">Select Package</span>
+                        <select class="form-select mt-1 block w-full">
+                           
+                            <option>Bed Only</option>
+                            <option>Bed and Breakfast</option>
+                            <option>Full Board</option>
+                            
+                        </select>
+                    </label>
+                    <button type="submit" onclick="window.location.href='payment.html'" class="px-4 py-2 bg-yellow-800 text-white rounded-md hover:bg-yellow-600 mt-4">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+window.onload = function() {
+    document.getElementById('roomName').innerText = localStorage.getItem('roomName');
+    document.getElementById('roomDescription').innerText = localStorage.getItem('roomDescription');
+    document.getElementById('roomPrice').innerText = "KES" + localStorage.getItem('roomPrice') + "/night";
+}
+
+    </script>
+</body>
+</html>
