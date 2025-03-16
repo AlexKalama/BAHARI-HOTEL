@@ -6,8 +6,19 @@ import Image from "next/image";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { supabaseClient } from "@/lib/supabase";
 
 type Room = {
@@ -15,7 +26,7 @@ type Room = {
   name: string;
   description: string;
   price: number;
-  amenities: string[];
+  amenities: string[] | string;
   image_url: string;
 };
 
@@ -26,12 +37,31 @@ export default function ReservationsPage() {
   const [checkOutDate, setCheckOutDate] = useState<Date>();
   const [isLoading, setIsLoading] = useState(true);
 
+  // Helper function to parse amenities from different formats
+  const parseAmenities = (amenities: any): string[] => {
+    if (!amenities) return [];
+    
+    if (typeof amenities === 'string') {
+      try {
+        // Try to parse as JSON string
+        return JSON.parse(amenities);
+      } catch (e) {
+        // If it's not valid JSON, split by comma
+        return amenities.split(',').map((item: string) => item.trim()).filter(Boolean);
+      }
+    }
+    
+    if (Array.isArray(amenities)) {
+      return amenities;
+    }
+    
+    return [];
+  };
+
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const { data, error } = await supabaseClient
-          .from("rooms")
-          .select("*");
+        const { data, error } = await supabaseClient.from("rooms").select("*");
 
         if (error) throw error;
         setRooms(data || []);
@@ -62,14 +92,18 @@ export default function ReservationsPage() {
 
   return (
     <div className="container mx-auto py-12 px-4">
-      <h1 className="text-3xl font-bold text-yellow-800 mb-6">Available Rooms</h1>
-      
+      <h1 className="text-3xl font-bold text-yellow-800 mb-6">
+        Available Rooms
+      </h1>
+
       {/* Date selection */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-xl font-semibold mb-4">Select Your Dates</h2>
         <div className="flex flex-col sm:flex-row gap-6">
           <div className="flex-1">
-            <label className="block text-sm font-medium mb-2">Check-in Date</label>
+            <label className="block text-sm font-medium mb-2">
+              Check-in Date
+            </label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -90,7 +124,9 @@ export default function ReservationsPage() {
             </Popover>
           </div>
           <div className="flex-1">
-            <label className="block text-sm font-medium mb-2">Check-out Date</label>
+            <label className="block text-sm font-medium mb-2">
+              Check-out Date
+            </label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -113,8 +149,8 @@ export default function ReservationsPage() {
         </div>
       </div>
 
-     {/* Room listings */}
-     {isLoading ? (
+      {/* Room listings */}
+      {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <p>Loading available rooms...</p>
         </div>
@@ -141,7 +177,7 @@ export default function ReservationsPage() {
                 <div className="space-y-2">
                   <h3 className="font-medium">Amenities:</h3>
                   <ul className="grid grid-cols-2 gap-x-2 gap-y-1">
-                    {(room.amenities || []).map((amenity, index) => (
+                    {parseAmenities(room.amenities).map((amenity, index) => (
                       <li key={index} className="flex items-center text-sm">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -162,7 +198,7 @@ export default function ReservationsPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button 
+                <Button
                   className="w-full bg-yellow-700 hover:bg-yellow-800"
                   onClick={() => bookRoom(room)}
                   disabled={!checkInDate || !checkOutDate}
