@@ -13,6 +13,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { RoomAvailabilityCalendar } from "@/components/room-availability-calendar";
 import { supabaseClient } from "@/lib/supabase";
 
@@ -33,7 +41,8 @@ export default function ReservationsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [bookingRoom, setBookingRoom] = useState<string | null>(null);
   const [guestCount, setGuestCount] = useState({ adults: 1, children: 0 });
-  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+  const [isBookingDialogOpen, setIsBookingDialogOpen] = useState(false);
 
   // Helper function to parse amenities from different formats
   const parseAmenities = (amenities: any): string[] => {
@@ -88,10 +97,21 @@ export default function ReservationsPage() {
     localStorage.setItem("checkOutDate", checkOutDate.toISOString());
     localStorage.setItem("guestCount", JSON.stringify(guestCount));
 
+    // Close the dialog
+    setIsBookingDialogOpen(false);
+
     // Navigate to booking confirmation page with short delay to show loading state
     setTimeout(() => {
       router.push(`/reservations/${room.id}`);
     }, 500);
+  };
+
+  // Function to open the booking dialog for a room
+  const openBookingDialog = (room: Room) => {
+    setSelectedRoom(room);
+    setCheckInDate(undefined);
+    setCheckOutDate(undefined);
+    setIsBookingDialogOpen(true);
   };
 
   return (
@@ -99,100 +119,6 @@ export default function ReservationsPage() {
       <h1 className="text-3xl font-bold text-yellow-800 mb-6">
         Available Rooms
       </h1>
-
-      {/* Date and guest selection */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-xl font-semibold mb-4">Your Stay Details</h2>
-
-        <div className="mb-6">
-          <label className="block text-sm font-medium mb-2">Select a Room Type:</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {rooms.map((room) => (
-              <div 
-                key={room.id}
-                className={`border rounded-lg p-3 cursor-pointer transition-all ${
-                  selectedRoomId === room.id ? 'border-yellow-600 bg-yellow-50' : 'border-gray-200 hover:border-yellow-400'
-                }`}
-                onClick={() => {
-                  setSelectedRoomId(room.id);
-                  setCheckInDate(undefined);
-                  setCheckOutDate(undefined);
-                }}
-              >
-                <div className="font-medium">{room.name}</div>
-                <div className="text-sm text-gray-500">KES {room.price.toLocaleString()}/night</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {selectedRoomId ? (
-          <RoomAvailabilityCalendar 
-            roomId={selectedRoomId}
-            selectedCheckIn={checkInDate}
-            selectedCheckOut={checkOutDate}
-            onCheckInChange={setCheckInDate}
-            onCheckOutChange={setCheckOutDate}
-          />
-        ) : (
-          <div className="text-center py-10 text-gray-500">
-            Please select a room type above to view available dates
-          </div>
-        )}
-
-        <div className="flex-1 mt-6">
-          <label className="block text-sm font-medium mb-2">Guests</label>
-          <div className="flex items-center space-x-4">
-            <div>
-              <label className="text-xs text-gray-500">Adults</label>
-              <div className="flex items-center mt-1">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  className="h-8 w-8 p-0" 
-                  onClick={() => setGuestCount(prev => ({...prev, adults: Math.max(1, prev.adults - 1)}))}
-                >-</Button>
-                <span className="mx-2 w-8 text-center">{guestCount.adults}</span>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  className="h-8 w-8 p-0" 
-                  onClick={() => setGuestCount(prev => ({...prev, adults: prev.adults + 1}))}
-                >+</Button>
-              </div>
-            </div>
-            <div>
-              <label className="text-xs text-gray-500">Children</label>
-              <div className="flex items-center mt-1">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  className="h-8 w-8 p-0" 
-                  onClick={() => setGuestCount(prev => ({...prev, children: Math.max(0, prev.children - 1)}))}
-                >-</Button>
-                <span className="mx-2 w-8 text-center">{guestCount.children}</span>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  className="h-8 w-8 p-0" 
-                  onClick={() => setGuestCount(prev => ({...prev, children: prev.children + 1}))}
-                >+</Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {checkInDate && checkOutDate && (
-        <div className="bg-green-50 border border-green-200 p-4 rounded-lg mb-8">
-          <div className="flex items-center text-green-800">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-            <span className="font-medium">Your stay: {format(checkInDate, "PP")} to {format(checkOutDate, "PP")} • {differenceInDays(checkOutDate, checkInDate)} nights • {guestCount.adults} adults, {guestCount.children} children</span>
-          </div>
-        </div>
-      )}
 
       {/* Room listings */}
       {isLoading ? (
@@ -207,9 +133,7 @@ export default function ReservationsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {rooms
-            .filter(room => !selectedRoomId || room.id === selectedRoomId)
-            .map((room) => (
+          {rooms.map((room) => (
             <Card key={room.id} className="overflow-hidden h-full flex flex-col">
               <div className="h-56 relative">
                 <Image
@@ -258,38 +182,146 @@ export default function ReservationsPage() {
                 </div>
               </CardContent>
               <CardFooter className="mt-auto">
-                {checkInDate && checkOutDate && (
-                  <div className="w-full">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm">
-                        {differenceInDays(checkOutDate, checkInDate)} nights:
-                      </span>
-                      <span className="font-semibold text-lg">
-                        KES {(room.price * differenceInDays(checkOutDate, checkInDate)).toLocaleString()}
-                      </span>
-                    </div>
-                    <Button
-                      className="w-full bg-yellow-700 hover:bg-yellow-800 relative"
-                      onClick={() => bookRoom(room)}
-                      disabled={!checkInDate || !checkOutDate || bookingRoom === room.id}
-                    >
-                      {bookingRoom === room.id ? (
-                        <>
-                          <span className="opacity-0">Book Now</span>
-                          <svg className="animate-spin h-5 w-5 absolute" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                        </>
-                      ) : "Book Now"}
-                    </Button>
-                  </div>
-                )}
+                <Button
+                  className="w-full bg-yellow-700 hover:bg-yellow-800"
+                  onClick={() => openBookingDialog(room)}
+                >
+                  Book This Room
+                </Button>
               </CardFooter>
             </Card>
           ))}
         </div>
       )}
+
+      {/* Booking Dialog */}
+      <Dialog 
+        open={isBookingDialogOpen} 
+        onOpenChange={setIsBookingDialogOpen}
+      >
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-yellow-800">Book Your Stay</DialogTitle>
+            {selectedRoom && (
+              <DialogDescription className="text-sm text-gray-500">
+                {selectedRoom.name} - KES {selectedRoom.price.toLocaleString()}/night
+              </DialogDescription>
+            )}
+          </DialogHeader>
+
+          <div className="space-y-6 py-4">
+            {selectedRoom && (
+              <>
+                <div className="relative h-40 w-full overflow-hidden rounded-lg">
+                  <Image
+                    src={selectedRoom.image_url || "/images/room-placeholder.jpg"}
+                    alt={selectedRoom.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h3 className="font-medium mb-2">Your Stay Details</h3>
+                  <RoomAvailabilityCalendar 
+                    roomId={selectedRoom.id}
+                    selectedCheckIn={checkInDate}
+                    selectedCheckOut={checkOutDate}
+                    onCheckInChange={setCheckInDate}
+                    onCheckOutChange={setCheckOutDate}
+                  />
+
+                  <div className="mt-4">
+                    <h3 className="font-medium mb-2">Guests</h3>
+                    <div className="flex items-center space-x-4">
+                      <div>
+                        <label className="text-xs text-gray-500">Adults</label>
+                        <div className="flex items-center mt-1">
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            className="h-8 w-8 p-0" 
+                            onClick={() => setGuestCount(prev => ({...prev, adults: Math.max(1, prev.adults - 1)}))}
+                          >-</Button>
+                          <span className="mx-2 w-8 text-center">{guestCount.adults}</span>
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            className="h-8 w-8 p-0" 
+                            onClick={() => setGuestCount(prev => ({...prev, adults: prev.adults + 1}))}
+                          >+</Button>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-xs text-gray-500">Children</label>
+                        <div className="flex items-center mt-1">
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            className="h-8 w-8 p-0" 
+                            onClick={() => setGuestCount(prev => ({...prev, children: Math.max(0, prev.children - 1)}))}
+                          >-</Button>
+                          <span className="mx-2 w-8 text-center">{guestCount.children}</span>
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            className="h-8 w-8 p-0" 
+                            onClick={() => setGuestCount(prev => ({...prev, children: prev.children + 1}))}
+                          >+</Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {checkInDate && checkOutDate && (
+                  <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+                    <div className="flex items-center text-green-800">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="font-medium">Your stay: {format(checkInDate, "PP")} to {format(checkOutDate, "PP")}</span>
+                    </div>
+                    <div className="mt-2 flex justify-between items-center">
+                      <div className="text-green-800">
+                        <span>{differenceInDays(checkOutDate, checkInDate)} nights • {guestCount.adults} adults, {guestCount.children} children</span>
+                      </div>
+                      <div className="font-bold text-green-800">
+                        KES {(selectedRoom.price * differenceInDays(checkOutDate, checkInDate)).toLocaleString()}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsBookingDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-yellow-700 hover:bg-yellow-800 relative"
+              onClick={() => selectedRoom && bookRoom(selectedRoom)}
+              disabled={!checkInDate || !checkOutDate || bookingRoom === selectedRoom?.id}
+            >
+              {bookingRoom === selectedRoom?.id ? (
+                <>
+                  <span className="opacity-0">Book Now</span>
+                  <svg className="animate-spin h-5 w-5 absolute" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                </>
+              ) : "Book Now"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
