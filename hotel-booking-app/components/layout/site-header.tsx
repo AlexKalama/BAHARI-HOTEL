@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import { Search, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useUserRole } from "@/context/user-role";
 
 export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isAdmin, isLoading } = useUserRole();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b shadow-sm bg-white">
@@ -56,15 +58,17 @@ export function SiteHeader() {
 
             {/* Authentication */}
             <SignedIn>
-              <Link href="/admin">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="border-yellow-700 text-yellow-800 hover:bg-yellow-50 font-medium"
-                >
-                  Dashboard
-                </Button>
-              </Link>
+              {isAdmin && !isLoading && (
+                <Link href="/admin">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="border-yellow-700 text-yellow-800 hover:bg-yellow-50 font-medium"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+              )}
               <UserButton 
                 afterSignOutUrl="/"
                 appearance={{
@@ -150,6 +154,19 @@ export function SiteHeader() {
                 </Link>
               </div>
             </SignedOut>
+            {isAdmin && !isLoading && (
+              <div className="mt-4 pt-4 border-t">
+                <Link href="/admin">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="w-full border-yellow-700 text-yellow-800 hover:bg-yellow-50"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}
