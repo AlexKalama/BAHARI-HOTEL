@@ -12,6 +12,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "La Safari Hotel - Luxury Meets Adventure",
   description: "Welcome to La Safari Hotel! Experience luxury, comfort and adventure in Mombasa, Kenya.",
+  icons: {
+    icon: '/ls-logo.svg',
+    apple: '/ls-logo.svg',
+  },
 };
 
 export default function RootLayout({

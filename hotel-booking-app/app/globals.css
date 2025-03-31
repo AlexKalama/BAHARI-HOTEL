@@ -4,6 +4,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Scale entire site to 90% */
+html {
+  zoom: 0.9;
+  -ms-zoom: 0.9;
+  -webkit-zoom: 0.9;
+  -moz-transform: scale(0.9);
+  -moz-transform-origin: 0 0;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

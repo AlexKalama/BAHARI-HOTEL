@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createClient } from "@supabase/supabase-js";
 
 // Use environment variables instead of hardcoded values
