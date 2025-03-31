@@ -160,7 +160,7 @@ export default function PaymentPage({ params }: { params: { id: string } }) {
               </div>
               <h2 className="text-2xl font-bold text-yellow-800 mb-2">Booking Confirmed!</h2>
               <p className="text-gray-600 mb-4">
-                Thank you for your booking at La Safari Hotel. A confirmation email has been sent to {booking?.guest_email}.
+                Thank you for your booking at LA SAFARI HOTEL. A confirmation email has been sent to {booking?.guest_email}.
               </p>
               <p className="text-sm text-gray-500 mb-6">
                 Your reservation is confirmed for {new Date(booking?.check_in_date).toLocaleDateString()} to {new Date(booking?.check_out_date).toLocaleDateString()}.

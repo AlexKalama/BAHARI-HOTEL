@@ -109,7 +109,7 @@ ${message}
 <body>
   <div class="container">
     <div class="header">
-      <div class="hotel-name">La Safari Hotel</div>
+      <div class="hotel-name">LA SAFARI HOTEL</div>
       <p>New Contact Form Submission</p>
     </div>
     
@@ -145,12 +145,12 @@ ${message}
     </div>
     
     <div class="footer">
-      <p><strong>La Safari Hotel</strong><br>
+      <p><strong>LA SAFARI HOTEL</strong><br>
       Beach Road, Malindi, Kenya<br>
       +254 123 456 789<br>
       info@lasafarihotel.com</p>
       
-      <p>&copy; ${new Date().getFullYear()} La Safari Hotel. All rights reserved.</p>
+      <p>&copy; ${new Date().getFullYear()} LA SAFARI HOTEL. All rights reserved.</p>
     </div>
   </div>
 </body>

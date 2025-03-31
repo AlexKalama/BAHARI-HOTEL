@@ -2,8 +2,8 @@ import { SignIn } from "@clerk/nextjs";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sign In | La Safari Hotel",
-  description: "Sign in to your La Safari Hotel account",
+  title: "Sign In | LA SAFARI HOTEL",
+  description: "Sign in to your LA SAFARI HOTEL account",
 };
 
 export default function SignInPage() {
@@ -11,7 +11,7 @@ export default function SignInPage() {
     <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900">Sign In</h1>
-        <p className="mt-2 text-gray-600">Welcome back to La Safari Hotel</p>
+        <p className="mt-2 text-gray-600">Welcome back to LA SAFARI HOTEL</p>
       </div>
       <SignIn
         appearance={{

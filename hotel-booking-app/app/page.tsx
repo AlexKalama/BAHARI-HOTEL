@@ -9,10 +9,10 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative bg-black text-white py-24 md:py-32">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">La Safari Hotel</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">LA SAFARI HOTEL</h1>
           <h2 className="text-xl md:text-2xl font-medium mb-8">Where Luxury Meets Adventure</h2>
           <p className="max-w-lg mx-auto text-gray-300 mb-10">
-            Welcome to La Safari Hotel! Located in the beautiful coastal city of Mombasa, Kenya, 
+            Welcome to LA SAFARI HOTEL! Located in the beautiful coastal city of Mombasa, Kenya, 
             we offer a unique blend of comfort and serenity. Immerse yourself in the vibrant culture, 
             stunning landscapes, and warm hospitality that make us a perfect getaway.
           </p>

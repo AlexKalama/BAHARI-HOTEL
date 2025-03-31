@@ -30,7 +30,7 @@ const teamMembers = [
   {
     name: "Ahmed Rahman",
     title: "Chief Executive Officer",
-    bio: "With over 20 years of experience in luxury hospitality, Ahmed brings unparalleled vision and leadership to La Safari Hotel.",
+    bio: "With over 20 years of experience in luxury hospitality, Ahmed brings unparalleled vision and leadership to LA SAFARI HOTEL.",
     image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
   },
   {
@@ -63,7 +63,7 @@ const milestones = [
   {
     year: 2008,
     title: "Grand Opening",
-    description: "La Safari Hotel welcomed its first guests, setting a new standard for luxury in East Africa."
+    description: "LA SAFARI HOTEL welcomed its first guests, setting a new standard for luxury in East Africa."
   },
   {
     year: 2012,
@@ -94,7 +94,7 @@ export default function AboutPage() {
       <div className="relative h-[60vh] overflow-hidden">
         <Image
           src="https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80"
-          alt="La Safari Hotel"
+          alt="LA SAFARI HOTEL"
           fill
           priority
           className="object-cover"
@@ -133,7 +133,7 @@ export default function AboutPage() {
         >
           <h2 className="text-3xl font-bold mb-6 text-yellow-800">Our Vision</h2>
           <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-            At La Safari Hotel, we envision a sanctuary where luxury meets authentic African hospitality. Our mission is to create unforgettable experiences that blend the rich cultural heritage of Kenya with world-class service and amenities.
+            At LA SAFARI HOTEL, we envision a sanctuary where luxury meets authentic African hospitality. Our mission is to create unforgettable experiences that blend the rich cultural heritage of Kenya with world-class service and amenities.
           </p>
           <p className="text-lg text-gray-600 leading-relaxed">
             We strive to be more than just a place to stay—we aim to be a destination that captures the essence of luxury, comfort, and cultural immersion, leaving our guests with memories that last a lifetime.
@@ -232,7 +232,7 @@ export default function AboutPage() {
         >
           <h2 className="text-3xl font-bold mb-6 text-yellow-800">Our Leadership Team</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Meet the visionaries behind La Safari Hotel who bring decades of experience in luxury hospitality and a passion for excellence.
+            Meet the visionaries behind LA SAFARI HOTEL who bring decades of experience in luxury hospitality and a passion for excellence.
           </p>
         </motion.div>
 

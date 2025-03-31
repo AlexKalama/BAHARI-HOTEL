@@ -84,7 +84,7 @@ export default function ContactPage() {
       <div className="relative h-[50vh] overflow-hidden">
         <Image
           src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-          alt="Contact La Safari Hotel"
+          alt="Contact LA SAFARI HOTEL"
           fill
           priority
           className="object-cover"
@@ -135,7 +135,7 @@ export default function ContactPage() {
               title: "Physical Address",
               icon: "📍",
               details: [
-                "La Safari Hotel",
+                "LA SAFARI HOTEL",
                 "Beach Road, Malindi",
                 "Kenya, East Africa"
               ]
@@ -344,7 +344,7 @@ export default function ContactPage() {
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-xs text-center">
                 <h3 className="text-xl font-bold mb-2 text-yellow-800">Find Us</h3>
                 <p className="text-gray-600 mb-4">
-                  Located on the pristine beaches of Diani, La Safari Hotel offers easy access to both natural beauty and urban conveniences.
+                  Located on the pristine beaches of Diani, LA SAFARI HOTEL offers easy access to both natural beauty and urban conveniences.
                 </p>
                 <a 
                   href="https://maps.app.goo.gl/GzgKVBQDQwj5qJ6u8" 

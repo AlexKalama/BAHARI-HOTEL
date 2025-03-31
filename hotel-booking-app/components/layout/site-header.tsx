@@ -22,7 +22,7 @@ export function SiteHeader() {
               </div>
               <div>
                 <span className="text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-yellow-700 to-yellow-900">
-                  La Safari Hotel
+                  LA SAFARI HOTEL
                 </span>
                 <p className="text-xs text-gray-500 hidden sm:block">Your Coastal Paradise</p>
               </div>

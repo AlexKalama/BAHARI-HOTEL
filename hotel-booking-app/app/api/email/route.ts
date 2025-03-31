@@ -65,10 +65,10 @@ export async function POST(request: Request) {
     
     if (emailType === 'confirmation') {
       emailHtml = generateBookingConfirmationHTML(booking);
-      subject = `Booking Confirmation - La Safari Hotel #${booking.id.substring(0, 8)}`;
+      subject = `Booking Confirmation - LA SAFARI HOTEL #${booking.id.substring(0, 8)}`;
     } else if (emailType === 'receipt') {
       emailHtml = generatePaymentReceiptHTML(booking);
-      subject = `Payment Receipt - La Safari Hotel #${booking.id.substring(0, 8)}`;
+      subject = `Payment Receipt - LA SAFARI HOTEL #${booking.id.substring(0, 8)}`;
     } else {
       return NextResponse.json({ success: false, error: 'Invalid email type' }, { status: 400 });
     }
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
       console.log(`[Email Service] Attempting to send ${emailType} email to ${booking.guest_email}`);
       
       const mailOptions = {
-        from: process.env.EMAIL_FROM || 'La Safari Hotel <alexkalama03@gmail.com>',
+        from: process.env.EMAIL_FROM || 'LA SAFARI HOTEL <alexkalama03@gmail.com>',
         to: booking.guest_email,
         subject: subject,
         html: emailHtml
@@ -245,13 +245,13 @@ function generateBookingConfirmationHTML(booking: any): string {
     <body>
       <div class="container">
         <div class="header">
-          <div class="hotel-name">La Safari Hotel</div>
+          <div class="hotel-name">LA SAFARI HOTEL</div>
           <p>Your Coastal Paradise</p>
         </div>
         
         <div class="content">
           <h2>Hello ${booking.guest_name},</h2>
-          <p>Your reservation at La Safari Hotel has been confirmed. Please find your booking details below:</p>
+          <p>Your reservation at LA SAFARI HOTEL has been confirmed. Please find your booking details below:</p>
           
           <div class="confirmation-code">
             Confirmation #: ${booking.id.substring(0, 8).toUpperCase()}
@@ -330,12 +330,12 @@ function generateBookingConfirmationHTML(booking: any): string {
         </div>
         
         <div class="footer">
-          <p><strong>La Safari Hotel</strong><br>
+          <p><strong>LA SAFARI HOTEL</strong><br>
           Beach Road, Malindi, Kenya<br>
           +254 123 456 789<br>
           info@baharihotel.com</p>
           
-          <p>&copy; ${new Date().getFullYear()} La Safari Hotel. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} LA SAFARI HOTEL. All rights reserved.</p>
         </div>
       </div>
     </body>
@@ -471,7 +471,7 @@ function generatePaymentReceiptHTML(booking: any): string {
     <body>
       <div class="container">
         <div class="header">
-          <div class="hotel-name">La Safari Hotel</div>
+          <div class="hotel-name">LA SAFARI HOTEL</div>
           <p>Your Coastal Paradise</p>
         </div>
         
@@ -556,18 +556,18 @@ function generatePaymentReceiptHTML(booking: any): string {
             </div>
           </div>
           
-          <p>Thank you for choosing La Safari Hotel. We look forward to welcoming you!</p>
+          <p>Thank you for choosing LA SAFARI HOTEL. We look forward to welcoming you!</p>
           
           <p><strong>Note:</strong> This is an electronic receipt. No physical copy will be sent.</p>
         </div>
         
         <div class="footer">
-          <p><strong>La Safari Hotel</strong><br>
+          <p><strong>LA SAFARI HOTEL</strong><br>
           Beach Road, Malindi, Kenya<br>
           +254 123 456 789<br>
           info@baharihotel.com</p>
           
-          <p>&copy; ${new Date().getFullYear()} La Safari Hotel. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} LA SAFARI HOTEL. All rights reserved.</p>
         </div>
       </div>
     </body>

@@ -39,9 +39,9 @@ export async function sendBookingConfirmationEmail(data: BookingSummaryEmailData
     const emailContent = generateBookingConfirmationEmailHTML(data);
     
     const mailOptions = {
-      from: process.env.EMAIL_FROM || 'La Safari Hotel <reservations@baharihotel.com>',
+      from: process.env.EMAIL_FROM || 'LA SAFARI HOTEL <reservations@baharihotel.com>',
       to: data.guestEmail,
-      subject: `Booking Confirmation - La Safari Hotel #${data.bookingId.substring(0, 8)}`,
+      subject: `Booking Confirmation - LA SAFARI HOTEL #${data.bookingId.substring(0, 8)}`,
       html: emailContent,
     };
     
@@ -59,9 +59,9 @@ export async function sendPaymentReceiptEmail(data: BookingSummaryEmailData): Pr
     const emailContent = generatePaymentReceiptEmailHTML(data);
     
     const mailOptions = {
-      from: process.env.EMAIL_FROM || 'La Safari Hotel <payments@baharihotel.com>',
+      from: process.env.EMAIL_FROM || 'LA SAFARI HOTEL <payments@baharihotel.com>',
       to: data.guestEmail,
-      subject: `Payment Receipt - La Safari Hotel #${data.bookingId.substring(0, 8)}`,
+      subject: `Payment Receipt - LA SAFARI HOTEL #${data.bookingId.substring(0, 8)}`,
       html: emailContent,
     };
     
@@ -196,12 +196,12 @@ function generateBookingConfirmationEmailHTML(data: BookingSummaryEmailData): st
       <div class="container">
         <div class="header">
           <h1>Booking Confirmation</h1>
-          <p>Thank you for choosing La Safari Hotel</p>
+          <p>Thank you for choosing LA SAFARI HOTEL</p>
         </div>
         
         <div class="content">
           <h2>Hello ${data.guestName},</h2>
-          <p>Your reservation at La Safari Hotel has been confirmed. Please find your booking details below:</p>
+          <p>Your reservation at LA SAFARI HOTEL has been confirmed. Please find your booking details below:</p>
           
           <div class="confirmation-code">
             Confirmation #: ${data.bookingId.substring(0, 8).toUpperCase()}
@@ -280,12 +280,12 @@ function generateBookingConfirmationEmailHTML(data: BookingSummaryEmailData): st
         </div>
         
         <div class="footer">
-          <p>La Safari Hotel<br>
+          <p>LA SAFARI HOTEL<br>
           Beach Road, Malindi, Kenya<br>
           +254 123 456 789<br>
           info@baharihotel.com</p>
           
-          <p>&copy; ${new Date().getFullYear()} La Safari Hotel. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} LA SAFARI HOTEL. All rights reserved.</p>
         </div>
       </div>
     </body>
@@ -409,7 +409,7 @@ function generatePaymentReceiptEmailHTML(data: BookingSummaryEmailData): string 
       <div class="container">
         <div class="header">
           <h1>Payment Receipt</h1>
-          <p>La Safari Hotel</p>
+          <p>LA SAFARI HOTEL</p>
         </div>
         
         <div class="content">
@@ -493,18 +493,18 @@ function generatePaymentReceiptEmailHTML(data: BookingSummaryEmailData): string 
             </div>
           </div>
           
-          <p>Thank you for choosing La Safari Hotel. We look forward to welcoming you!</p>
+          <p>Thank you for choosing LA SAFARI HOTEL. We look forward to welcoming you!</p>
           
           <p><strong>Note:</strong> This is an electronic receipt. No physical copy will be sent.</p>
         </div>
         
         <div class="footer">
-          <p>La Safari Hotel<br>
+          <p>LA SAFARI HOTEL<br>
           Beach Road, Malindi, Kenya<br>
           +254 123 456 789<br>
           info@baharihotel.com</p>
           
-          <p>&copy; ${new Date().getFullYear()} La Safari Hotel. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} LA SAFARI HOTEL. All rights reserved.</p>
         </div>
       </div>
     </body>

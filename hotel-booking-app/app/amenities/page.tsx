@@ -124,7 +124,7 @@ export default function AmenitiesPage() {
         <div className="mb-8">
           <h2 className="text-3xl font-bold mb-4 text-yellow-800">Experience Unparalleled Luxury</h2>
           <p className="text-gray-600">
-            At La Safari Hotel, we pride ourselves on offering an unmatched selection of amenities designed to elevate your stay to new heights of comfort and luxury. Every detail has been meticulously crafted to ensure your experience with us is nothing short of extraordinary.
+            At LA SAFARI HOTEL, we pride ourselves on offering an unmatched selection of amenities designed to elevate your stay to new heights of comfort and luxury. Every detail has been meticulously crafted to ensure your experience with us is nothing short of extraordinary.
           </p>
         </div>
         <div className="border-t border-b border-yellow-200 py-8 grid grid-cols-3 md:grid-cols-6 gap-6 text-center">

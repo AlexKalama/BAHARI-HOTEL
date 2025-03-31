@@ -6,7 +6,7 @@ export function SiteFooter() {
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div>
-            <h3 className="text-xl font-bold mb-4">La Safari Hotel</h3>
+            <h3 className="text-xl font-bold mb-4">LA SAFARI HOTEL</h3>
             <p className="text-gray-400 mb-6">
               Located in the beautiful coastal city of Mombasa, Kenya, we offer a unique blend of comfort and serenity.
             </p>
@@ -44,7 +44,7 @@ export function SiteFooter() {
           <div>
             <h3 className="text-xl font-bold mb-4">Contact Us</h3>
             <address className="text-gray-400 not-italic">
-              <p>La Safari Hotel</p>
+              <p>LA SAFARI HOTEL</p>
               <p>Mombasa, Kenya</p>
               <p className="mt-4">Email: info@lasafarihotel.com</p>
               <p>Phone: +254 123 456 789</p>
@@ -72,7 +72,7 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="mt-12 border-t border-gray-800 pt-8 text-center">
-          <p className="text-gray-400">© 2025 La Safari Hotel. All rights reserved.</p>
+          <p className="text-gray-400">© 2025 LA SAFARI HOTEL. All rights reserved.</p>
         </div>
       </div>
     </footer>
