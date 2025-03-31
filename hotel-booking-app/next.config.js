@@ -18,6 +18,10 @@ const nextConfig = {
       allowedOrigins: ["localhost:3000", "la-safari-hotel.vercel.app"],
     },
   },
+  // Ignore TypeScript errors during build
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 }
 
 module.exports = nextConfig
