@@ -13,14 +13,14 @@ export default function HomePage() {
         {/* Beach Image Background */}
         <div className="absolute inset-0 w-full h-full z-0">
           <Image
-            src="/images/beach-paradise.jpg"
+            src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=80"
             alt="Beach Paradise"
             fill
             priority
             className="object-cover"
           />
           {/* Overlay to darken the image and improve text readability */}
-          <div className="absolute inset-0 bg-black/70"></div>
+          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         </div>
         
         {/* Hero Content */}
@@ -51,12 +51,12 @@ export default function HomePage() {
               {
                 title: "Restaurant & Bar",
                 description: "Enjoy fine dining and refreshing beverages in our elegant restaurant and bar.",
-                image: "/images/Restaurant.jpg",
+                image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
               },
               {
                 title: "Spa",
                 description: "Indulge in a soothing retreat at our spa, offering a range of rejuvenating treatments.",
-                image: "/images/spa.jpg",
+                image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
               },
               {
                 title: "Event Spaces",
@@ -66,17 +66,17 @@ export default function HomePage() {
               {
                 title: "Pools",
                 description: "Experience tranquility in our captivating pools, ideal for a rejuvenating swim.",
-                image: "/images/pools.jpg",
+                image: "https://images.unsplash.com/photo-1540539234-c14a20fb7c7b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
               },
               {
                 title: "Accommodations",
                 description: "Unwind in our plush accommodations, thoughtfully designed for your comfort and relaxation.",
-                image: "/images/rooms.jpg",
+                image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
               },
               {
                 title: "Recreation & Activities",
                 description: "Engage in a variety of fun-filled recreational activities, designed for your entertainment and leisure.",
-                image: "/images/recreation.jpg",
+                image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
               },
             ].map((amenity, i) => (
               <Card key={i} className="overflow-hidden">
@@ -92,13 +92,13 @@ export default function HomePage() {
                 <CardContent className="p-6">
                   <CardTitle className="mb-2">{amenity.title}</CardTitle>
                   <CardDescription>{amenity.description}</CardDescription>
-                  <div className="flex justify-end mt-4">
+                  {/* <div className="flex justify-end mt-4">
                     <Link href="/reservations">
                       <Button variant="outline" className="text-yellow-800 border-yellow-800 hover:bg-yellow-50">
                         Learn More
                       </Button>
                     </Link>
-                  </div>
+                  </div> */}
                 </CardContent>
               </Card>
             ))}
