@@ -22,7 +22,7 @@ export default function HomePage() {
             unoptimized
           />
           {/* Overlay to darken the image and improve text readability */}
-          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+          <div className="absolute inset-0 bg-black/70"></div>
         </div>
         
         {/* Hero Content */}
