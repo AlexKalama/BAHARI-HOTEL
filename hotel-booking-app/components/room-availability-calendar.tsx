@@ -35,6 +35,7 @@ export function RoomAvailabilityCalendar({
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [checkoutCalendarDefaultMonth, setCheckoutCalendarDefaultMonth] = useState<Date | undefined>(undefined);
 
   useEffect(() => {
     const fetchAvailability = async () => {
@@ -60,6 +61,13 @@ export function RoomAvailabilityCalendar({
       fetchAvailability();
     }
   }, [roomId]);
+
+  useEffect(() => {
+    // When check-in date changes, set the default month for check-out calendar
+    if (selectedCheckIn) {
+      setCheckoutCalendarDefaultMonth(selectedCheckIn);
+    }
+  }, [selectedCheckIn]);
 
   // Create a function to check if a date is booked
   const isDateBooked = (date: Date) => {
@@ -199,6 +207,7 @@ export function RoomAvailabilityCalendar({
               mode="single"
               selected={selectedCheckOut}
               onSelect={handleCheckOutSelect}
+              defaultMonth={checkoutCalendarDefaultMonth}
               disabled={(date: Date) => {
                 // Ensure check-out is after check-in
                 if (!selectedCheckIn || date <= selectedCheckIn) return true;

@@ -97,13 +97,11 @@ export default function ReservationsPage() {
     localStorage.setItem("checkOutDate", checkOutDate.toISOString());
     localStorage.setItem("guestCount", JSON.stringify(guestCount));
 
-    // Close the dialog
-    setIsBookingDialogOpen(false);
-
-    // Navigate to booking confirmation page with short delay to show loading state
+    // Keep dialog open during loading and navigate to booking confirmation page after delay
     setTimeout(() => {
+      setIsBookingDialogOpen(false);
       router.push(`/reservations/${room.id}`);
-    }, 500);
+    }, 1500); // Slightly longer delay to show the loading state
   };
 
   // Function to open the booking dialog for a room
@@ -199,7 +197,7 @@ export default function ReservationsPage() {
         open={isBookingDialogOpen} 
         onOpenChange={setIsBookingDialogOpen}
       >
-        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-yellow-800">Book Your Stay</DialogTitle>
             {selectedRoom && (
