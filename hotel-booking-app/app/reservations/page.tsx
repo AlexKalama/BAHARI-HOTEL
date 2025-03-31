@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { format, differenceInDays } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,11 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { RoomAvailabilityCalendar } from "@/components/room-availability-calendar";
 import { supabaseClient } from "@/lib/supabase";
 
 type Room = {
@@ -38,6 +33,7 @@ export default function ReservationsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [bookingRoom, setBookingRoom] = useState<string | null>(null);
   const [guestCount, setGuestCount] = useState({ adults: 1, children: 0 });
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
   // Helper function to parse amenities from different formats
   const parseAmenities = (amenities: any): string[] => {
@@ -107,93 +103,80 @@ export default function ReservationsPage() {
       {/* Date and guest selection */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-xl font-semibold mb-4">Your Stay Details</h2>
-        <div className="flex flex-col sm:flex-row gap-6">
-          <div className="flex-1">
-            <label className="block text-sm font-medium mb-2">
-              Check-in Date
-            </label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal"
-                >
-                  {checkInDate ? format(checkInDate, "PPP") : "Select date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={checkInDate}
-                  onSelect={setCheckInDate}
-                  disabled={(date) => date < new Date()}
-                  className="rounded-md border"
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <div className="flex-1">
-            <label className="block text-sm font-medium mb-2">
-              Check-out Date
-            </label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal"
-                >
-                  {checkOutDate ? format(checkOutDate, "PPP") : "Select date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={checkOutDate}
-                  onSelect={setCheckOutDate}
-                  disabled={(date) => !checkInDate || date <= checkInDate}
-                  className="rounded-md border"
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <div className="flex-1">
-            <label className="block text-sm font-medium mb-2">Guests</label>
-            <div className="flex items-center space-x-4">
-              <div>
-                <label className="text-xs text-gray-500">Adults</label>
-                <div className="flex items-center mt-1">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    className="h-8 w-8 p-0" 
-                    onClick={() => setGuestCount(prev => ({...prev, adults: Math.max(1, prev.adults - 1)}))}
-                  >-</Button>
-                  <span className="mx-2 w-8 text-center">{guestCount.adults}</span>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    className="h-8 w-8 p-0" 
-                    onClick={() => setGuestCount(prev => ({...prev, adults: prev.adults + 1}))}
-                  >+</Button>
-                </div>
+
+        <div className="mb-6">
+          <label className="block text-sm font-medium mb-2">Select a Room Type:</label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {rooms.map((room) => (
+              <div 
+                key={room.id}
+                className={`border rounded-lg p-3 cursor-pointer transition-all ${
+                  selectedRoomId === room.id ? 'border-yellow-600 bg-yellow-50' : 'border-gray-200 hover:border-yellow-400'
+                }`}
+                onClick={() => {
+                  setSelectedRoomId(room.id);
+                  setCheckInDate(undefined);
+                  setCheckOutDate(undefined);
+                }}
+              >
+                <div className="font-medium">{room.name}</div>
+                <div className="text-sm text-gray-500">KES {room.price.toLocaleString()}/night</div>
               </div>
-              <div>
-                <label className="text-xs text-gray-500">Children</label>
-                <div className="flex items-center mt-1">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    className="h-8 w-8 p-0" 
-                    onClick={() => setGuestCount(prev => ({...prev, children: Math.max(0, prev.children - 1)}))}
-                  >-</Button>
-                  <span className="mx-2 w-8 text-center">{guestCount.children}</span>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    className="h-8 w-8 p-0" 
-                    onClick={() => setGuestCount(prev => ({...prev, children: prev.children + 1}))}
-                  >+</Button>
-                </div>
+            ))}
+          </div>
+        </div>
+
+        {selectedRoomId ? (
+          <RoomAvailabilityCalendar 
+            roomId={selectedRoomId}
+            selectedCheckIn={checkInDate}
+            selectedCheckOut={checkOutDate}
+            onCheckInChange={setCheckInDate}
+            onCheckOutChange={setCheckOutDate}
+          />
+        ) : (
+          <div className="text-center py-10 text-gray-500">
+            Please select a room type above to view available dates
+          </div>
+        )}
+
+        <div className="flex-1 mt-6">
+          <label className="block text-sm font-medium mb-2">Guests</label>
+          <div className="flex items-center space-x-4">
+            <div>
+              <label className="text-xs text-gray-500">Adults</label>
+              <div className="flex items-center mt-1">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  className="h-8 w-8 p-0" 
+                  onClick={() => setGuestCount(prev => ({...prev, adults: Math.max(1, prev.adults - 1)}))}
+                >-</Button>
+                <span className="mx-2 w-8 text-center">{guestCount.adults}</span>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  className="h-8 w-8 p-0" 
+                  onClick={() => setGuestCount(prev => ({...prev, adults: prev.adults + 1}))}
+                >+</Button>
+              </div>
+            </div>
+            <div>
+              <label className="text-xs text-gray-500">Children</label>
+              <div className="flex items-center mt-1">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  className="h-8 w-8 p-0" 
+                  onClick={() => setGuestCount(prev => ({...prev, children: Math.max(0, prev.children - 1)}))}
+                >-</Button>
+                <span className="mx-2 w-8 text-center">{guestCount.children}</span>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  className="h-8 w-8 p-0" 
+                  onClick={() => setGuestCount(prev => ({...prev, children: prev.children + 1}))}
+                >+</Button>
               </div>
             </div>
           </div>
@@ -224,7 +207,9 @@ export default function ReservationsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {rooms.map((room) => (
+          {rooms
+            .filter(room => !selectedRoomId || room.id === selectedRoomId)
+            .map((room) => (
             <Card key={room.id} className="overflow-hidden h-full flex flex-col">
               <div className="h-56 relative">
                 <Image
