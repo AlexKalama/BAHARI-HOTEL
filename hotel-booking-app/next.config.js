@@ -15,7 +15,7 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ["localhost:3000", "bahari-hotel.vercel.app"],
+      allowedOrigins: ["localhost:3000", "la-safari-hotel.vercel.app"],
     },
   },
   // Ignore TypeScript errors during build
