@@ -285,6 +285,8 @@ export default function BookingConfirmationPage({ params }: { params: { id: stri
       
       // Send confirmation email via our API endpoint
       try {
+        toast.loading("Sending confirmation email...");
+        
         const emailResponse = await fetch('/api/email', {
           method: 'POST',
           headers: {
@@ -298,13 +300,19 @@ export default function BookingConfirmationPage({ params }: { params: { id: stri
         
         const emailResult = await emailResponse.json();
         
+        toast.dismiss();
+        
         if (emailResult.success) {
           console.log("Confirmation email sent successfully");
+          toast.success("Booking confirmation email sent!");
         } else {
           console.error("Failed to send confirmation email:", emailResult.error);
+          toast.error("Could not send confirmation email, but your booking is still created.");
         }
       } catch (emailError) {
+        toast.dismiss();
         console.error("Error sending confirmation email:", emailError);
+        toast.error("Could not send confirmation email, but your booking is still created.");
         // Don't stop the booking process if email fails
       }
       

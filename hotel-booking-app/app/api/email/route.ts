@@ -1,11 +1,38 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import nodemailer from 'nodemailer';
 
 // Initialize Supabase client with environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
+// Configure email transporter
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+  port: Number(process.env.EMAIL_PORT) || 465,
+  secure: true, // Use direct SSL
+  auth: {
+    user: process.env.EMAIL_USER || 'alexkalama03@gmail.com',
+    pass: process.env.EMAIL_PASSWORD || 'mtgi qeyv mkun abzu'
+  },
+  tls: {
+    // Do not fail on invalid certs
+    rejectUnauthorized: false
+  },
+  debug: true, // Show debug output
+  logger: true // Log information to the console
+});
+
+// Verify connection configuration
+transporter.verify(function(error, success) {
+  if (error) {
+    console.log("SMTP Verification Error:", error);
+  } else {
+    console.log("SMTP Server is ready to take our messages");
+  }
+});
 
 export async function POST(request: Request) {
   try {
@@ -45,28 +72,46 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'Invalid email type' }, { status: 400 });
     }
     
-    // In a production environment, you'd integrate with a real email service like SendGrid or Amazon SES
-    // For now, we'll just return success and the generated HTML for demonstration
+    // Actually send the email
+    try {
+      console.log(`[Email Service] Attempting to send ${emailType} email to ${booking.guest_email}`);
+      
+      const mailOptions = {
+        from: process.env.EMAIL_FROM || 'Bahari Hotel <alexkalama03@gmail.com>',
+        to: booking.guest_email,
+        subject: subject,
+        html: emailHtml
+      };
+      
+      console.log("Mail options:", mailOptions);
+      
+      const info = await transporter.sendMail(mailOptions);
+      
+      console.log(`[Email Service] Email sent successfully: ${info.messageId}`);
+      console.log(`[Email Service] Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      
+      return NextResponse.json({
+        success: true,
+        message: `${emailType} email sent to ${booking.guest_email}`,
+        messageId: info.messageId
+      });
+    } catch (emailError: any) {
+      console.error('[Email Service] Error sending email:', emailError);
+      console.error('[Email Service] Error details:', emailError.stack);
+      
+      return NextResponse.json({ 
+        success: false, 
+        error: `Failed to send email: ${emailError.message}` 
+      }, { status: 500 });
+    }
+  } catch (error: any) {
+    console.error('[Email Service] Error processing email request:', error);
+    console.error('[Email Service] Error stack:', error.stack);
     
-    console.log(`[Email Service] Sending ${emailType} email to ${booking.guest_email}`);
-    
-    // This would be where you'd call your email service
-    // const emailSent = await emailService.send({
-    //   to: booking.guest_email,
-    //   from: 'reservations@baharihotel.com',
-    //   subject,
-    //   html: emailHtml
-    // });
-    
-    return NextResponse.json({
-      success: true,
-      message: `${emailType} email would be sent to ${booking.guest_email}`,
-      // Include the html for preview/testing purposes
-      emailHtml
-    });
-  } catch (error) {
-    console.error('Error sending email:', error);
-    return NextResponse.json({ success: false, error: 'Failed to send email' }, { status: 500 });
+    return NextResponse.json({ 
+      success: false, 
+      error: `Failed to process email request: ${error.message}` 
+    }, { status: 500 });
   }
 }
 

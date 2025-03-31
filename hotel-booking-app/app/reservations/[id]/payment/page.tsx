@@ -17,6 +17,7 @@ export default function PaymentPage({ params }: { params: { id: string } }) {
   const [packageDetails, setPackageDetails] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   useEffect(() => {
     const fetchBookingData = async () => {
@@ -88,15 +89,31 @@ export default function PaymentPage({ params }: { params: { id: string } }) {
 
       if (error) throw error;
 
+      // Send receipt email
+      const emailResponse = await fetch('/api/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bookingId: booking.id,
+          emailType: 'receipt'
+        }),
+      });
+      
+      const emailResult = await emailResponse.json();
+      console.log("Email sending result:", emailResult);
+
       // Clear localStorage
       localStorage.removeItem("selectedRoom");
       localStorage.removeItem("checkInDate");
       localStorage.removeItem("checkOutDate");
       localStorage.removeItem("bookingId");
 
-      // Navigate to success page or show success message
-      alert("Payment successful! Your booking has been confirmed.");
-      router.push("/"); // Or to a success page
+      // Show success dialog
+      setShowSuccessDialog(true);
+      
+      // Don't navigate automatically - let the user see the success message first
     } catch (error) {
       console.error("Payment processing error:", error);
       alert("Payment failed. Please try again.");
@@ -131,6 +148,37 @@ export default function PaymentPage({ params }: { params: { id: string } }) {
     <div className="container mx-auto py-12 px-4">
       <h1 className="text-3xl font-bold text-yellow-800 mb-6">Complete Your Payment</h1>
       
+      {/* Success Dialog */}
+      {showSuccessDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full">
+            <div className="text-center">
+              <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-yellow-800 mb-2">Booking Confirmed!</h2>
+              <p className="text-gray-600 mb-4">
+                Thank you for your booking at Bahari Hotel. A confirmation email has been sent to {booking?.guest_email}.
+              </p>
+              <p className="text-sm text-gray-500 mb-6">
+                Your reservation is confirmed for {new Date(booking?.check_in_date).toLocaleDateString()} to {new Date(booking?.check_out_date).toLocaleDateString()}.
+              </p>
+              <p className="text-sm text-gray-500 mb-6">
+                Booking Reference: <span className="font-mono font-medium">{booking?.id.substring(0, 8).toUpperCase()}</span>
+              </p>
+              <Button 
+                className="w-full bg-yellow-700 hover:bg-yellow-800 text-white"
+                onClick={() => router.push("/")}
+              >
+                Return to Homepage
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Booking Summary */}
       <Card className="mb-8">
         <CardHeader>
