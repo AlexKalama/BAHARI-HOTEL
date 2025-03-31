@@ -43,6 +43,7 @@ export default function ReservationsPage() {
   const [guestCount, setGuestCount] = useState({ adults: 1, children: 0 });
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [isBookingDialogOpen, setIsBookingDialogOpen] = useState(false);
+  const [loadingCardRoom, setLoadingCardRoom] = useState<string | null>(null);
 
   // Helper function to parse amenities from different formats
   const parseAmenities = (amenities: any): string[] => {
@@ -106,10 +107,16 @@ export default function ReservationsPage() {
 
   // Function to open the booking dialog for a room
   const openBookingDialog = (room: Room) => {
-    setSelectedRoom(room);
-    setCheckInDate(undefined);
-    setCheckOutDate(undefined);
-    setIsBookingDialogOpen(true);
+    setLoadingCardRoom(room.id);
+    
+    // Simulate a short loading delay before opening the dialog
+    setTimeout(() => {
+      setSelectedRoom(room);
+      setCheckInDate(undefined);
+      setCheckOutDate(undefined);
+      setIsBookingDialogOpen(true);
+      setLoadingCardRoom(null);
+    }, 500);
   };
 
   return (
@@ -183,8 +190,17 @@ export default function ReservationsPage() {
                 <Button
                   className="w-full bg-yellow-700 hover:bg-yellow-800"
                   onClick={() => openBookingDialog(room)}
+                  disabled={loadingCardRoom === room.id}
                 >
-                  Book This Room
+                  {loadingCardRoom === room.id ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Processing...
+                    </>
+                  ) : "Book This Room"}
                 </Button>
               </CardFooter>
             </Card>

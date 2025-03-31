@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -6,18 +8,32 @@ import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/c
 export default function HomePage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative bg-black text-white py-24 md:py-32">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">LA SAFARI HOTEL</h1>
-          <h2 className="text-xl md:text-2xl font-medium mb-8">Where Luxury Meets Adventure</h2>
-          <p className="max-w-lg mx-auto text-gray-300 mb-10">
+      {/* Hero Section with Beach Image Background */}
+      <section className="relative h-screen overflow-hidden">
+        {/* Beach Image Background */}
+        <div className="absolute inset-0 w-full h-full z-0">
+          <Image
+            src="/images/beach-paradise.jpg"
+            alt="Beach Paradise"
+            fill
+            priority
+            className="object-cover"
+          />
+          {/* Overlay to darken the image and improve text readability */}
+          <div className="absolute inset-0 bg-black/70"></div>
+        </div>
+        
+        {/* Hero Content */}
+        <div className="container relative z-10 mx-auto px-4 h-full flex flex-col justify-center items-center text-center text-white">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white shadow-text">LA SAFARI HOTEL</h1>
+          <h2 className="text-xl md:text-3xl font-medium mb-8 shadow-text">Where Luxury Meets Adventure</h2>
+          <p className="max-w-lg mx-auto text-gray-200 mb-10 shadow-text">
             Welcome to LA SAFARI HOTEL! Located in the beautiful coastal city of Mombasa, Kenya, 
             we offer a unique blend of comfort and serenity. Immerse yourself in the vibrant culture, 
             stunning landscapes, and warm hospitality that make us a perfect getaway.
           </p>
           <Link href="/reservations">
-            <Button size="lg" className="bg-yellow-700 hover:bg-yellow-800">
+            <Button size="lg" className="bg-yellow-700 hover:bg-yellow-800 text-lg px-8 py-6">
               Book Now
             </Button>
           </Link>

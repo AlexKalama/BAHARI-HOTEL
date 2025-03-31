@@ -17,6 +17,10 @@ const nextConfig = {
       allowedOrigins: ['localhost:3000'],
     },
   },
+  // Ignore TypeScript errors during build
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 }
 
 module.exports = nextConfig

@@ -6,10 +6,10 @@
 
 /* Scale entire site to 90% */
 html {
-  zoom: 0.9;
-  -ms-zoom: 0.9;
-  -webkit-zoom: 0.9;
-  -moz-transform: scale(0.9);
+  zoom: 0.95;
+  -ms-zoom: 0.95;
+  -webkit-zoom: 0.95;
+  -moz-transform: scale(0.95);
   -moz-transform-origin: 0 0;
 }
 
@@ -140,6 +140,11 @@ html {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* Add text shadow for better readability over video backgrounds */
+.shadow-text {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 @layer base {
