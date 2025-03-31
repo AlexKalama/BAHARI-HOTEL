@@ -31,9 +31,9 @@ export function SiteHeader() {
           <nav className="hidden md:flex items-center space-x-1">
             {[
               { name: "Home", href: "/" },
-              { name: "Reservations", href: "/reservations" },
-              { name: "Amenities", href: "/amenities" },
               { name: "About Us", href: "/about" },
+              { name: "Amenities", href: "/amenities" },
+              { name: "Reservations", href: "/reservations" },
               { name: "Contact", href: "/contact" },
             ].map((item) => (
               <Link 
@@ -114,9 +114,9 @@ export function SiteHeader() {
           <div className="container mx-auto px-4 py-3 space-y-1">
             {[
               { name: "Home", href: "/" },
-              { name: "Reservations", href: "/reservations" },
-              { name: "Amenities", href: "/amenities" },
               { name: "About Us", href: "/about" },
+              { name: "Amenities", href: "/amenities" },
+              { name: "Reservations", href: "/reservations" },
               { name: "Contact", href: "/contact" },
             ].map((item) => (
               <Link

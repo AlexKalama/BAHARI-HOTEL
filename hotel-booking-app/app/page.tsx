@@ -45,7 +45,7 @@ export default function HomePage() {
               {
                 title: "Event Spaces",
                 description: "Make lasting memories in our large versatile event spaces, perfect for any occasion.",
-                image: "/images/event-spaces.jpg",
+                image: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
               },
               {
                 title: "Pools",
@@ -77,9 +77,11 @@ export default function HomePage() {
                   <CardTitle className="mb-2">{amenity.title}</CardTitle>
                   <CardDescription>{amenity.description}</CardDescription>
                   <div className="flex justify-end mt-4">
-                    <Button variant="outline" className="text-yellow-800 border-yellow-800 hover:bg-yellow-50">
-                      Learn More
-                    </Button>
+                    <Link href="/reservations">
+                      <Button variant="outline" className="text-yellow-800 border-yellow-800 hover:bg-yellow-50">
+                        Learn More
+                      </Button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
@@ -99,7 +101,7 @@ export default function HomePage() {
               </p>
             </div>
             <div>
-              <Link href="/contact">
+              <Link href="/reservations">
                 <Button size="lg" className="bg-yellow-700 hover:bg-yellow-600">
                   Contact Us
                 </Button>
