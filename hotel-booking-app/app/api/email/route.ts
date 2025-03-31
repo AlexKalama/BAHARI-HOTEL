@@ -160,10 +160,13 @@ function generateBookingConfirmationHTML(booking: any): string {
           padding: 20px;
           text-align: center;
         }
-        .logo {
-          width: 120px;
-          height: auto;
+        .hotel-name {
+          font-size: 32px;
+          font-weight: bold;
           margin-bottom: 10px;
+          color: #7b5800;
+          text-transform: uppercase;
+          letter-spacing: 1px;
         }
         .content {
           padding: 30px;
@@ -179,6 +182,7 @@ function generateBookingConfirmationHTML(booking: any): string {
           height: auto;
           border-radius: 6px;
           margin-bottom: 15px;
+          object-fit: cover;
         }
         .detail-row {
           display: flex;
@@ -240,8 +244,8 @@ function generateBookingConfirmationHTML(booking: any): string {
     <body>
       <div class="container">
         <div class="header">
-          <h1>Booking Confirmation</h1>
-          <p>Thank you for choosing Bahari Hotel</p>
+          <div class="hotel-name">Bahari Hotel</div>
+          <p>Your Coastal Paradise</p>
         </div>
         
         <div class="content">
@@ -252,7 +256,7 @@ function generateBookingConfirmationHTML(booking: any): string {
             Confirmation #: ${booking.id.substring(0, 8).toUpperCase()}
           </div>
           
-          <img src="${room.image_url || 'https://via.placeholder.com/600x300?text=Bahari+Hotel+Room'}" alt="${room.name}" class="room-image" />
+          <img src="${rooms?.image_url || 'https://baharihotel.com/images/rooms/default-room.jpg'}" alt="${room.name}" class="room-image" />
           
           <div class="booking-info">
             <h3>${room.name}</h3>
@@ -325,7 +329,7 @@ function generateBookingConfirmationHTML(booking: any): string {
         </div>
         
         <div class="footer">
-          <p>Bahari Hotel<br>
+          <p><strong>Bahari Hotel</strong><br>
           Beach Road, Malindi, Kenya<br>
           +254 123 456 789<br>
           info@baharihotel.com</p>
@@ -355,6 +359,9 @@ function generatePaymentReceiptHTML(booking: any): string {
   
   // Generate a receipt number
   const receiptNumber = `RCT-${Date.now().toString().substring(0, 8)}`;
+  
+  // Determine payment method (default to M-Pesa if not specified)
+  const paymentMethod = booking.payment_method || 'M-Pesa';
   
   return `
     <!DOCTYPE html>
@@ -386,6 +393,14 @@ function generatePaymentReceiptHTML(booking: any): string {
           color: #7b5800;
           padding: 20px;
           text-align: center;
+        }
+        .hotel-name {
+          font-size: 32px;
+          font-weight: bold;
+          margin-bottom: 10px;
+          color: #7b5800;
+          text-transform: uppercase;
+          letter-spacing: 1px;
         }
         .content {
           padding: 30px;
@@ -455,8 +470,8 @@ function generatePaymentReceiptHTML(booking: any): string {
     <body>
       <div class="container">
         <div class="header">
-          <h1>Payment Receipt</h1>
-          <p>Bahari Hotel</p>
+          <div class="hotel-name">Bahari Hotel</div>
+          <p>Your Coastal Paradise</p>
         </div>
         
         <div class="content">
@@ -529,7 +544,7 @@ function generatePaymentReceiptHTML(booking: any): string {
             
             <div class="detail-row">
               <span class="detail-label">Payment Method:</span>
-              <span>Credit Card</span>
+              <span>${paymentMethod}</span>
             </div>
             
             <div class="detail-row">
@@ -546,7 +561,7 @@ function generatePaymentReceiptHTML(booking: any): string {
         </div>
         
         <div class="footer">
-          <p>Bahari Hotel<br>
+          <p><strong>Bahari Hotel</strong><br>
           Beach Road, Malindi, Kenya<br>
           +254 123 456 789<br>
           info@baharihotel.com</p>
