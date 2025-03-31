@@ -7,8 +7,8 @@ import { format, differenceInDays } from "date-fns";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "react-hot-toast";
+import { sendBookingConfirmationEmail, sendPaymentReceiptEmail } from "@/lib/email";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,7 +20,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Spinner } from "@/components/spinner";
 import { supabaseClient } from "@/lib/supabase";
 
 // Form schema
@@ -245,15 +244,15 @@ export default function BookingConfirmationPage({ params }: { params: { id: stri
     window.scrollTo(0, 0);
   };
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    if (!room || !checkInDate || !checkOutDate) {
-      alert("Missing booking information. Please try again.");
-      return;
-    }
-    
-    setIsSubmitting(true);
-
+  const onSubmit = async (data: any) => {
     try {
+      setIsSubmitting(true);
+      
+      if (!room) {
+        toast.error("Room information is missing. Please refresh the page and try again.");
+        return;
+      }
+      
       // Create booking record in Supabase
       const { data: booking, error } = await supabaseClient
         .from("bookings")
@@ -262,6 +261,7 @@ export default function BookingConfirmationPage({ params }: { params: { id: stri
           package_id: data.packageId || null,
           guest_name: data.name,
           guest_email: data.email,
+          guest_phone: data.phone, // Added guest_phone field
           check_in_date: checkInDate.toISOString(),
           check_out_date: checkOutDate.toISOString(),
           adults: data.adults,
@@ -273,17 +273,85 @@ export default function BookingConfirmationPage({ params }: { params: { id: stri
         })
         .select()
         .single();
-
-      if (error) throw error;
-
-      // Store booking ID for payment page
-      localStorage.setItem("bookingId", booking.id);
       
-      // Navigate to payment page
-      router.push(`/reservations/${roomId}/payment`);
-    } catch (error) {
+      if (error) {
+        throw error;
+      }
+
+      console.log("Booking created:", booking);
+      
+      // Store booking ID for potential later use
+      localStorage.setItem("currentBookingId", booking.id);
+      
+      // Send confirmation email via our API endpoint
+      try {
+        const emailResponse = await fetch('/api/email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            bookingId: booking.id,
+            emailType: 'confirmation'
+          }),
+        });
+        
+        const emailResult = await emailResponse.json();
+        
+        if (emailResult.success) {
+          console.log("Confirmation email sent successfully");
+        } else {
+          console.error("Failed to send confirmation email:", emailResult.error);
+        }
+      } catch (emailError) {
+        console.error("Error sending confirmation email:", emailError);
+        // Don't stop the booking process if email fails
+      }
+      
+      // Mock payment process (in a real app, you'd redirect to a payment gateway)
+      setTimeout(() => {
+        // After "payment" is complete, send receipt email
+        try {
+          fetch('/api/email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              bookingId: booking.id,
+              emailType: 'receipt'
+            }),
+          }).then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                console.log("Receipt email sent successfully");
+              } else {
+                console.error("Failed to send receipt email:", data.error);
+              }
+            });
+          
+          // Update booking to paid status after successful payment (mock)
+          supabaseClient
+            .from("bookings")
+            .update({ payment_status: "paid" })
+            .eq("id", booking.id)
+            .then(() => console.log("Booking marked as paid"));
+          
+        } catch (receiptError) {
+          console.error("Error sending receipt email:", receiptError);
+        }
+      }, 3000); // Simulate 3 second payment processing
+      
+      // Show success message
+      toast.success("Booking successful! Proceeding to payment...");
+      
+      // Navigate to final step
+      navigateToStep(3);
+      
+    } catch (error: any) {
       console.error("Error creating booking:", error);
-      alert("Failed to create booking. Please try again.");
+      toast.error(error.message || "Failed to create booking. Please try again.");
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -763,74 +831,76 @@ export default function BookingConfirmationPage({ params }: { params: { id: stri
             <div className="bg-white p-6 rounded-lg shadow-md mb-8">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="John Doe" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input type="email" placeholder="john@example.com" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Phone Number</FormLabel>
-                          <FormControl>
-                            <Input placeholder="+254 123456789" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="adults"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Adults</FormLabel>
-                            <FormControl>
-                              <Input type="number" min={1} {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
+                  <div className="grid grid-cols-1 gap-4">
+                    <div>
+                      <Label htmlFor="name">Full Name</Label>
+                      <Input
+                        id="name"
+                        placeholder="Enter your full name"
+                        {...form.register("name", { required: "Name is required" })}
                       />
-                      <FormField
-                        control={form.control}
-                        name="children"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Children</FormLabel>
-                            <FormControl>
-                              <Input type="number" min={0} {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      {form.formState.errors.name && <p className="text-sm text-red-500 mt-1">{form.formState.errors.name.message}</p>}
                     </div>
+                    <div>
+                      <Label htmlFor="email">Email Address</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="Enter your email address"
+                        {...form.register("email", { 
+                          required: "Email is required",
+                          pattern: {
+                            value: /\S+@\S+\.\S+/,
+                            message: "Please enter a valid email address"
+                          }
+                        })}
+                      />
+                      {form.formState.errors.email && <p className="text-sm text-red-500 mt-1">{form.formState.errors.email.message}</p>}
+                    </div>
+                    <div>
+                      <Label htmlFor="phone">Phone Number</Label>
+                      <Input
+                        id="phone"
+                        placeholder="Enter your phone number"
+                        {...form.register("phone", { 
+                          required: "Phone number is required",
+                          pattern: {
+                            value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
+                            message: "Please enter a valid phone number"
+                          }
+                        })}
+                      />
+                      {form.formState.errors.phone && <p className="text-sm text-red-500 mt-1">{form.formState.errors.phone.message}</p>}
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="adults"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Adults</FormLabel>
+                          <FormControl>
+                            <Input type="number" min={1} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="children"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Children</FormLabel>
+                          <FormControl>
+                            <Input type="number" min={0} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                   
                   <FormField

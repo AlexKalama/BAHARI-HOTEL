@@ -17,16 +17,26 @@ export async function uploadImage(file: File, bucket: string = 'rooms') {
     const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
     const filePath = `${fileName}`;
 
+    // Create a debug output to help diagnose issues
+    console.log("Uploading file:", { name: file.name, size: file.size, type: file.type, bucket });
+    
+    // Check if file is actually a File object
+    if (!(file instanceof File)) {
+      throw new Error("Invalid file object provided");
+    }
+
     // Upload the file to Supabase storage
     const { data, error } = await supabaseClient.storage
       .from(bucket)
       .upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: false,
+        cacheControl: '0',
+        upsert: true, // Changed from false to true to allow overwriting
       });
 
     if (error) {
       // Handle specific error cases with more helpful messages
+      console.error("Storage upload error:", error);
+      
       if (error.message.includes('bucket') && error.message.includes('not found')) {
         throw new Error(`Storage bucket "${bucket}" not found. Please create it in your Supabase dashboard.`);
       } else if (
@@ -42,11 +52,14 @@ export async function uploadImage(file: File, bucket: string = 'rooms') {
       throw error;
     }
 
+    console.log("Upload successful:", data);
+
     // Get the public URL for the uploaded file
     const { data: { publicUrl } } = supabaseClient.storage
       .from(bucket)
       .getPublicUrl(filePath);
 
+    console.log("Generated public URL:", publicUrl);
     return { filePath, publicUrl };
   } catch (error: any) {
     console.error('Error uploading image:', error);
