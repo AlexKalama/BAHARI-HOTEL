@@ -11,16 +11,12 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    unoptimized: process.env.NODE_ENV === 'production',
+    unoptimized: true,
   },
   experimental: {
     serverActions: {
       allowedOrigins: ["localhost:3000", "la-safari-hotel.vercel.app"],
     },
-  },
-  // Ignore TypeScript errors during build
-  typescript: {
-    ignoreBuildErrors: true,
   },
 }
 

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 
@@ -12,12 +11,11 @@ export default function HomePage() {
       <section className="relative h-screen overflow-hidden">
         {/* Beach Image Background */}
         <div className="absolute inset-0 w-full h-full z-0">
-          <Image
+          {/* Using regular img tag instead of Next.js Image component for better compatibility */}
+          <img
             src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=80"
             alt="Beach Paradise"
-            fill
-            priority
-            className="object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
           />
           {/* Overlay to darken the image and improve text readability */}
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
@@ -81,11 +79,10 @@ export default function HomePage() {
             ].map((amenity, i) => (
               <Card key={i} className="overflow-hidden">
                 <div className="h-48 overflow-hidden">
-                  <Image
+                  {/* Using regular img tag instead of Next.js Image component */}
+                  <img
                     src={amenity.image}
                     alt={amenity.title}
-                    width={500}
-                    height={300}
                     className="w-full h-full object-cover"
                   />
                 </div>

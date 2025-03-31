@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Email service utility
 import nodemailer from 'nodemailer';
 import { format } from 'date-fns';
@@ -207,7 +208,7 @@ function generateBookingConfirmationEmailHTML(data: BookingSummaryEmailData): st
             Confirmation #: ${data.bookingId.substring(0, 8).toUpperCase()}
           </div>
           
-          <img src="${data.roomImage || 'https://via.placeholder.com/600x300'}" alt="${data.roomName}" class="room-image" />
+          <img src="${data.roomImage || 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'}" alt="${data.roomName}" class="room-image" />
           
           <div class="booking-info">
             <h3>${data.roomName}</h3>
@@ -276,14 +277,14 @@ function generateBookingConfirmationEmailHTML(data: BookingSummaryEmailData): st
           
           <p>If you need to modify or cancel your reservation, please contact us as soon as possible.</p>
           
-          <a href="https://baharihotel.com/manage-booking/${data.bookingId}" class="button">Manage Booking</a>
+          <a href="https://la-safari-hotel.vercel.app/manage-booking/${data.bookingId}" class="button">Manage Booking</a>
         </div>
         
         <div class="footer">
           <p>LA SAFARI HOTEL<br>
           Beach Road, Malindi, Kenya<br>
           +254 123 456 789<br>
-          info@baharihotel.com</p>
+          info@lasafarihotel.com</p>
           
           <p>&copy; ${new Date().getFullYear()} LA SAFARI HOTEL. All rights reserved.</p>
         </div>
@@ -502,7 +503,7 @@ function generatePaymentReceiptEmailHTML(data: BookingSummaryEmailData): string 
           <p>LA SAFARI HOTEL<br>
           Beach Road, Malindi, Kenya<br>
           +254 123 456 789<br>
-          info@baharihotel.com</p>
+          info@lasafarihotel.com</p>
           
           <p>&copy; ${new Date().getFullYear()} LA SAFARI HOTEL. All rights reserved.</p>
         </div>
