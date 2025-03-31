@@ -280,8 +280,8 @@ export default function BookingConfirmationPage({ params }: { params: { id: stri
 
       console.log("Booking created:", booking);
       
-      // Store booking ID for potential later use
-      localStorage.setItem("currentBookingId", booking.id);
+      // Store booking ID with the correct key for the payment page
+      localStorage.setItem("bookingId", booking.id);
       
       // Send confirmation email via our API endpoint
       try {
@@ -308,45 +308,11 @@ export default function BookingConfirmationPage({ params }: { params: { id: stri
         // Don't stop the booking process if email fails
       }
       
-      // Mock payment process (in a real app, you'd redirect to a payment gateway)
-      setTimeout(() => {
-        // After "payment" is complete, send receipt email
-        try {
-          fetch('/api/email', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              bookingId: booking.id,
-              emailType: 'receipt'
-            }),
-          }).then(res => res.json())
-            .then(data => {
-              if (data.success) {
-                console.log("Receipt email sent successfully");
-              } else {
-                console.error("Failed to send receipt email:", data.error);
-              }
-            });
-          
-          // Update booking to paid status after successful payment (mock)
-          supabaseClient
-            .from("bookings")
-            .update({ payment_status: "paid" })
-            .eq("id", booking.id)
-            .then(() => console.log("Booking marked as paid"));
-          
-        } catch (receiptError) {
-          console.error("Error sending receipt email:", receiptError);
-        }
-      }, 3000); // Simulate 3 second payment processing
-      
       // Show success message
-      toast.success("Booking successful! Proceeding to payment...");
+      toast.success("Booking successful! Redirecting to payment...");
       
-      // Navigate to final step
-      navigateToStep(3);
+      // Redirect to payment page instead of just showing step 3
+      router.push(`/reservations/${roomId}/payment`);
       
     } catch (error: any) {
       console.error("Error creating booking:", error);
